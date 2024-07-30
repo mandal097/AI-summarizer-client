@@ -7,7 +7,7 @@ interface FeatureCardProps {
 }
 
 const FeatureCard: React.FC<FeatureCardProps> = ({ title, description }) => (
-  <div className="bg-gray-100 shadow-lg rounded-lg overflow-hidden border border-gray-200">
+  <div className="bg-gray-950 shadow-lg rounded-lg overflow-hidden border border-gray-200">
     <div className="flex items-center- p-6 space-x-4">
       <div>
         <h3 className="text-xl text-blue font-semibold mb-2">{title}</h3>

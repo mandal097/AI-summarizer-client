@@ -2,8 +2,8 @@ import React from "react";
 
 const Loader: React.FC<{ text: string }> = ({ text }) => {
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen fixed inset-0 z-10">
-      <div className="bg-gray-300 flex flex-col items-center justify-center p-8 rounded-lg">
+    <div className="flex flex-col items-center justify-center min-h-screen fixed inset-0 z-50 p-8 bg-[rgba(0,0,0,0.8)]">
+      <div className="bg-gray-300 flex flex-col items-center justify-center p-4 sm:p-8 rounded-lg">
         <svg
           className="animate-spin h-12 w-12 mb-4 text-gray-900"
           xmlns="http://www.w3.org/2000/svg"
@@ -21,7 +21,7 @@ const Loader: React.FC<{ text: string }> = ({ text }) => {
             fill="currentColor"
             d="M4 12a8 8 0 018-8v8H4z"></path>
         </svg>
-        <p className="text-lg font-semibold text-gray-700">{text}</p>
+        <p className="text-lg font-semibold text-gray-700 text-center">{text}</p>
       </div>
     </div>
   );

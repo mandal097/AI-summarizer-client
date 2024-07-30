@@ -14,13 +14,10 @@ interface ParsedData {
 const Summary = () => {
   const navigate = useNavigate();
   const [videoId, setVideoId] = useState<string | null>("");
-  const [videoUrl, setVideoUrl] = useState<string>("");
-  const [text, setText] = useState("");
-  const [transcript, setTranscript] = useState("");
-  const [loading, setLoading] = useState(true);
-  const [loaderTxt, setLoaderTxt] = useState(
-    "Processing your video might take time..."
-  );
+  const [text, setText] = useState<string | null>("");
+  const [transcript, setTranscript] = useState<string | null>("");
+  const [loading, setLoading] = useState(false);
+  const [isSummary, setIsSummary] = useState(false);
 
   useEffect(() => {
     const jsonString: string | null = localStorage.getItem("yt");
@@ -28,47 +25,28 @@ const Summary = () => {
     if (jsonString) {
       try {
         const data: ParsedData = JSON.parse(jsonString);
-        setVideoUrl(data?.url);
         const v_id = getVideoId(data?.url);
         setVideoId(v_id);
       } catch (error) {
         console.error("Error parsing JSON:", error);
       }
     }
+    const transcript_ = localStorage.getItem("transcript");
+    // console.log("summary\n", transcript_);
+    setTranscript(transcript_);
+    setText(transcript_);
   }, []);
-
-  useEffect(() => {
-    const fetchTranscript = async () => {
-      setLoading(true);
-      try {
-        const res = await ax.post("/yt/get-transcript", { videoUrl });
-        if (res?.data?.status === "err") {
-          toast.error(res?.data?.message);
-        }
-        if (res?.data?.status === "success") {
-          setText(res?.data?.transcribeRes);
-          setTranscript(res?.data?.transcribeRes);
-        }
-      } catch (error) {
-        toast.error("Something went wrong");
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchTranscript();
-  }, [videoId, videoUrl]);
 
   const getSummary = async () => {
     setLoading(true);
-    setLoaderTxt("Summarizing your provided transcript...");
     try {
       const res = await ax.post("/yt/summary", { transcript });
       if (res?.data?.status === "err") {
         toast.error(res?.data?.message);
       }
       if (res?.data?.status === "success") {
-        console.log(res?.data);
         setText(res?.data?.data);
+        setIsSummary(true);
       }
     } catch (error) {
       toast.error("Something went wrong");
@@ -77,7 +55,17 @@ const Summary = () => {
     }
   };
 
-  if (loading) return <Loader text={loaderTxt} />;
+  const copyToClipboard = async (param: string) => {
+    try {
+      const copyText: string | null = param === "tr" ? transcript : text;
+      await navigator.clipboard.writeText(String(copyText));
+      toast.success("Text copied to clipboard!");
+    } catch (err) {
+      toast.error("Failed to copy text.");
+    }
+  };
+
+  if (loading) return <Loader text="Summarizing your provided transcript..." />;
   return (
     <div className="min-h-screen auto pt-24 sm:pt-32 flex flex-col sm:flex-row p-4 relative gap-3">
       <ToastContainer />
@@ -90,17 +78,24 @@ const Summary = () => {
           frameBorder="0"
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
           allowFullScreen></iframe>
-        <div className="w-full sm:mt-32 flex flex-col">
+        <div className="w-full sm:mt-20 flex flex-col">
           <button
             onClick={() => navigate("/tr")}
             className="bg-primary text-white px-4 py-2 rounded-md hover:bg-blue">
             New Request
           </button>
           <button
-            onClick={() => navigate("/tr")}
-            className="border border-primary text-primary mt-2 px-4 py-2 rounded-md hover:bg-blue">
+            onClick={() => copyToClipboard("tr")}
+            className="border border-primary text-primary hover:text-white mt-2 px-4 py-2 rounded-md hover:bg-blue">
             Copy entire transcript
           </button>
+          {isSummary && (
+            <button
+              onClick={() => copyToClipboard("sm")}
+              className="border border-primary text-primary hover:text-white mt-2 px-4 py-2 rounded-md hover:bg-blue">
+              Copy summary
+            </button>
+          )}
         </div>
       </div>
 
@@ -109,7 +104,11 @@ const Summary = () => {
       {/* Right Section */}
       <div className="flex-1 p-1 bg-gray-950 pb-24 sm:px-6">
         <h2 className="text-xl text-primary font-semibold mb-4">
-          Full transcript of your source
+          {text
+            ? isSummary
+              ? "Summary"
+              : "Full transcript of your source"
+            : ""}
         </h2>
         <TextContent content={text} />
       </div>

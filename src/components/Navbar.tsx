@@ -21,26 +21,26 @@ const Navbar = () => {
     setShow(!show);
   };
 
+  const handleClose = () => {
+    setShow(false);
+  };
+
   return (
     <div
-      className={`w-full d-flex-center bg-gray-950 transition-all duration-500  fixed z-50 ${
+      className={`w-full d-flex-center bg-gray-950 transition-all duration-500  fixed z-40 ${
         scrolled ? "py-3 shadow-navbar" : "py-6"
       }`}>
       <div className="w-full px-3 lg:w-[1024px] flex items-center justify-between sm:px-4">
         <Link
           to="/"
           className="h-full flex items-center justify-between cursor-pointer">
-          <img
-            className="rounded-md h-12 w-12"
-            src="/yt_img.png"
-            alt=""
-          />
+          <img className="rounded-md h-12 w-12" src="/yt_img.png" alt="" />
           <p
             className="pl-3 text-xl font-semibold text-primary font-playwrite"
             onClick={() => {
               window.scroll({ top: 0, behavior: "smooth" });
             }}>
-           YouTube summarizer{" "}
+            YouTube summarizer{" "}
           </p>
         </Link>
         <div
@@ -56,19 +56,26 @@ const Navbar = () => {
             className={`flex-col  ${
               show ? "flex animate-[fade_200ms_ease-in_1]" : "hidden"
             } items-start rounded-lg p-5 h-[80%] w-[90%] bg-gray-950 lg:bg-transparent static lg:h-full lg:w-full lg:flex lg:flex-row lg:items-center lg:p-0 gap-8`}>
-            <Link onClick={handleToggle} to="/" className="nav-links">
+            <Link
+              onClick={handleClose}
+              to="/"
+              className="nav-links">
               Home
             </Link>
-            <Link onClick={handleToggle} to="/about" className="nav-links">
+            <Link
+              onClick={handleClose}
+              to="/about"
+              className="nav-links">
               About us
             </Link>
             <button
-            // http://15.206.80.75:3000/api
+              // http://15.206.80.75:3000/api
               onClick={() => {
                 navigate("/tr");
+                handleClose();
               }}
               className="btn-primary w-full md:w-fit bg-blue hover:bg-primary">
-             Get started
+              Get started
             </button>
           </div>
         </div>

@@ -1,5 +1,5 @@
 interface TextContentProps {
-  content: string;
+  content: string | null;
 }
 import he from "he";
 
@@ -36,7 +36,9 @@ const processText = (text: string) => {
 const TextContent = ({ content }: TextContentProps) => {
   return (
     <div className="my-3 px-4 py-3 rounded-lg h-full">
-      <p className="text text-sm text-gray-200">{processText(content)}</p>
+      <p className="text text-sm text-gray-200">
+        {content === null ? "" : processText(String(content))}
+      </p>
       {!content && (
         <div className="text-2xl h-[50vh] text-gray-300 flex justify-center items-center gap-3 font-bold">
           <h2 className="font-light">Paste your</h2>
