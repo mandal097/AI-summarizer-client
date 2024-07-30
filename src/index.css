@@ -1,0 +1,43 @@
+@import url('https://fonts.googleapis.com/css2?family=Playwrite+AT:ital,wght@0,100..400;1,100..400&family=Quicksand:wght@300..700&display=swap');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+  .btn-primary {
+    @apply d-flex-center py-2 px-6 rounded-lg text-base border-primary text-white transition-colors duration-500;
+  }
+  .nav-links {
+    @apply text-white;
+  }
+}
+
+.d-flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+:root {
+  --primary: #3498db;
+  --blue: #0d6efd;
+  --black: #222222;
+  --dark-gray: #555555;
+  --regular-gray: #484848;
+  --light-gray: #444444;
+  --white: #fff;
+}
+
+html,
+body {
+  /* background-color: #ebe8e7; */
+  background-color: #000;
+}
+
+
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  font-family: "Quicksand", sans-serif;
+}
