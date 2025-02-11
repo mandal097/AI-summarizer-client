@@ -42,7 +42,7 @@ const Transcribe = () => {
       }
       if (res?.data?.status === "success") {
         const transcript = res?.data?.transcribeRes;
-        alert(transcript)
+        // alert(transcript)
         localStorage.setItem("transcript", transcript);
         setTimeout(() => {
           navigate("/sm");
